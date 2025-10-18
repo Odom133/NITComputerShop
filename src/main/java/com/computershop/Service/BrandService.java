@@ -1,7 +1,7 @@
 package com.computershop.Service;
 
-import com.computershop.DTO.BrandRequest;
-import com.computershop.DTO.BrandResponse;
+import com.computershop.DTO.Brand.BrandRequest;
+import com.computershop.DTO.Brand.BrandResponse;
 import com.computershop.Mapper.BrandMapper;
 import com.computershop.Model.Entity.Brand;
 import com.computershop.Repository.BrandRepository;

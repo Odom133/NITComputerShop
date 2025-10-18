@@ -1,8 +1,8 @@
 package com.computershop.Controller;
 
 
-import com.computershop.DTO.BrandRequest;
-import com.computershop.DTO.BrandResponse;
+import com.computershop.DTO.Brand.BrandRequest;
+import com.computershop.DTO.Brand.BrandResponse;
 import com.computershop.Service.BrandService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;

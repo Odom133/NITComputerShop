@@ -1,7 +1,7 @@
 package com.computershop.Mapper;
 
-import com.computershop.DTO.BrandRequest;
-import com.computershop.DTO.BrandResponse;
+import com.computershop.DTO.Brand.BrandRequest;
+import com.computershop.DTO.Brand.BrandResponse;
 import com.computershop.Model.Entity.Brand;
 import org.springframework.stereotype.Component;
 

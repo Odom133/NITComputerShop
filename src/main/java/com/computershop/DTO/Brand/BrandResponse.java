@@ -1,4 +1,4 @@
-package com.computershop.DTO;
+package com.computershop.DTO.Brand;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
