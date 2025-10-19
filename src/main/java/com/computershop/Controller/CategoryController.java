@@ -1,9 +1,11 @@
 package com.computershop.Controller;
 
+import com.computershop.DTO.Category.CategoryEditRequest;
 import com.computershop.DTO.Category.CategoryRequest;
 import com.computershop.DTO.Category.CategoryResponse;
 import com.computershop.Service.CategoryService;
 import com.computershop.Util.ApiResponse;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,26 +21,45 @@ public class CategoryController {
     public final CategoryService categoryService;
 
     @GetMapping
-    public ResponseEntity<List<CategoryResponse>> getAll() {
-        return ResponseEntity.ok(categoryService.getAll());
+    public ResponseEntity<ApiResponse<List<CategoryResponse>>> getAll() {
+        return ResponseEntity.status(HttpStatus.OK)
+                        .body(ApiResponse.ok(this.categoryService.getAll()));
     }
+
+//    @GetMapping("/{id}")
+//    public ResponseEntity<?> getById(@PathVariable("id") Long id) {
+//        return ResponseEntity.status(HttpStatus.FOUND)
+//                .body(ApiResponse.ok(this.categoryService.getById(id)));
+//    }
 
     @GetMapping("/{id}")
-    public ResponseEntity<CategoryResponse> getById(@PathVariable("id") Long id) {
-        return ResponseEntity.ok(categoryService.getById(id));
+    @ResponseStatus(HttpStatus.FOUND)
+    public ApiResponse<?> getById(@PathVariable("id") Long id) {
+        return ApiResponse.ok(categoryService.getById(id));
     }
 
-    /*
     @PostMapping
-    public ResponseEntity<CategoryResponse> create(@RequestBody CategoryRequest request) {
-        return ResponseEntity.ok(categoryService.create(request));
+    @ResponseStatus(HttpStatus.CREATED)
+    public ApiResponse<CategoryResponse> create(@Valid  @RequestBody CategoryRequest request) {
+        return ApiResponse.create(categoryService.create(request));
     }
-     */
 
-    @PostMapping
-    public ResponseEntity<ApiResponse<CategoryResponse>> create( @RequestBody CategoryRequest request) {
-        return ResponseEntity.status(HttpStatus.CREATED)
-                .body(ApiResponse.create(categoryService.create(request), "Category created successfully"));
+    @PutMapping("{id}")
+    @ResponseStatus(HttpStatus.OK)
+    public ApiResponse<?> update(@PathVariable("id") Long id, @Valid @RequestBody CategoryEditRequest request ) {
+        return ApiResponse.ok(categoryService.update(id,request));
+    }
+//    @DeleteMapping("/{id}")
+//    @ResponseStatus(HttpStatus.NO_CONTENT)
+//    public ResponseEntity<?> delete(@PathVariable("id") Long id) {
+//        this.categoryService.delete(id);
+//        return ResponseEntity.status(HttpStatus.OK)
+//                .body(ApiResponse.ok(null));
+//    }
+    @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void delete(@PathVariable("id") Long id) {
+        this.categoryService.delete(id);
     }
 
 }

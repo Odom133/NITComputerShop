@@ -33,11 +33,24 @@ public class ApiResponse<T> {
         return new ApiResponse<>(true, HttpStatus.CREATED.value(),message,data);
     }
 
-    public static <T> ApiResponse<T> success(T data, String message){ //list, list_one, update, remove
+    public static <T> ApiResponse<T> ok(T data){
+        return new ApiResponse<>(true, HttpStatus.OK.value(),"Success",data);
+    }
+
+    public static <T> ApiResponse<T> ok(T data, String message){ //list, list_one, update, remove
         return new ApiResponse<>(true, HttpStatus.OK.value(),message,data);
     }
 
     public static <T> ApiResponse<T> error(T data, String message, Integer status){ // 401,400,500
         return new ApiResponse<>(false, status,message,data);
+    }
+    /** Error response with custom HTTP status */
+    public static <T> ApiResponse<T> error(String message, HttpStatus status) {
+        return new ApiResponse<>(false, status.value(), message, null);
+    }
+
+    /** Error response with custom data and status */
+    public static <T> ApiResponse<T> error(T data, String message, HttpStatus status) {
+        return new ApiResponse<>(false, status.value(), message, data);
     }
 }

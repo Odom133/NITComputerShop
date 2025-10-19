@@ -13,8 +13,8 @@ import java.time.LocalDateTime;
 @Builder
 public class BrandResponse {
     private Long id;
-    private String name;
     private String code;
+    private String name;
     private String description;
     private Boolean status;
     private String createBy;

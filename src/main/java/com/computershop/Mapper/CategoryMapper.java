@@ -1,5 +1,6 @@
 package com.computershop.Mapper;
 
+import com.computershop.DTO.Category.CategoryEditRequest;
 import com.computershop.DTO.Category.CategoryRequest;
 import com.computershop.DTO.Category.CategoryResponse;
 import com.computershop.Model.Entity.Category;
@@ -18,6 +19,16 @@ public class CategoryMapper {
                 .updateBy(categoryRequest.getUpdateBy())
                 .build();
     }
+
+//    public Category toEntityEdit(CategoryEditRequest categoryEditRequest) {
+//        return Category.builder()
+//                .code(categoryEditRequest.getCode())
+//                .name(categoryEditRequest.getName())
+//                .description(categoryEditRequest.getDescription())
+//                .status(categoryEditRequest.getStatus())
+//                .updateBy(categoryEditRequest.getUpdateBy())
+//                .build();
+//    }
 
     public CategoryResponse toResponse(Category entity) {
         return CategoryResponse.builder()

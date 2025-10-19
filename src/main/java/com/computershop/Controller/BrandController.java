@@ -4,6 +4,7 @@ package com.computershop.Controller;
 import com.computershop.DTO.Brand.BrandRequest;
 import com.computershop.DTO.Brand.BrandResponse;
 import com.computershop.Service.BrandService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -27,11 +28,11 @@ public class BrandController {
         return ResponseEntity.ok(brandService.getById(id));
     }
     @PostMapping
-    public ResponseEntity<BrandResponse> create(@RequestBody BrandRequest request) {
+    public ResponseEntity<BrandResponse> create( @Valid @RequestBody BrandRequest request) {
         return ResponseEntity.ok(brandService.create(request));
     }
     @PutMapping("/{id}")
-    public ResponseEntity<BrandResponse> update(@PathVariable("id") Long id, @RequestBody BrandRequest request) {
+    public ResponseEntity<BrandResponse> update(@PathVariable("id") Long id,@Valid  @RequestBody BrandRequest request) {
         return ResponseEntity.ok(brandService.update(id,request));
     }
     @DeleteMapping("/{id}")

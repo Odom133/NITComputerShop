@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class CategoryRequest {
+public class CategoryEditRequest {
 
     @NotEmpty(message = "Code required!")
     private String code;
@@ -18,6 +18,5 @@ public class CategoryRequest {
     private String name;
     private String description;
     private Boolean status;
-    private String createBy;
     private String updateBy;
 }

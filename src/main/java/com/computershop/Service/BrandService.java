@@ -2,6 +2,7 @@ package com.computershop.Service;
 
 import com.computershop.DTO.Brand.BrandRequest;
 import com.computershop.DTO.Brand.BrandResponse;
+import com.computershop.Exception.NotFoundException;
 import com.computershop.Mapper.BrandMapper;
 import com.computershop.Model.Entity.Brand;
 import com.computershop.Repository.BrandRepository;
@@ -26,7 +27,7 @@ public class BrandService {
     }
 
     public BrandResponse getById(Long id) {
-        Brand brand = brandRepository.findById(id).orElseThrow(()-> new RuntimeException("Brand Not Found!"));
+        Brand brand = brandRepository.findById(id).orElseThrow(()-> new NotFoundException("Brand Not Found!"));
         return brandMapper.toResponse(brand);
     }
 
@@ -40,7 +41,7 @@ public class BrandService {
     }
 
     public BrandResponse update(Long id, BrandRequest request) {
-        Brand brand = brandRepository.findById(id).orElseThrow(()-> new RuntimeException("Brand not found with id " + id));
+        Brand brand = brandRepository.findById(id).orElseThrow(()-> new NotFoundException("Brand not found with id " + id));
 
         brand.setName(request.getName());
         brand.setCode(request.getCode());
@@ -53,7 +54,7 @@ public class BrandService {
     }
 
     public void delete(Long id) {
-        Brand brand = brandRepository.findById(id).orElseThrow(() -> new RuntimeException("Brand not found with id " + id));
+        Brand brand = brandRepository.findById(id).orElseThrow(() -> new NotFoundException("Brand not found with id " + id));
             brandRepository.delete(brand);
     }
 
