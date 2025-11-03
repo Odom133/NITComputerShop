@@ -8,9 +8,14 @@ import com.computershop.Mapper.CategoryMapper;
 import com.computershop.Model.Entity.Category;
 import com.computershop.Repository.CategoryRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
@@ -30,6 +35,40 @@ public class CategoryService {
     public CategoryResponse getById(Long id) {
         Category category = categoryRepository.findById(id).orElseThrow(()-> new RuntimeException("Category Not found")  );
         return categoryMapper.toResponse(category);
+    }
+
+    public List<Category> filter(Long id, String name, String code, LocalDateTime startDate, LocalDateTime endDate, String sortBy, String sortAs) {
+        //  filter or search
+        Specification<Category> spec = Specification.unrestricted();
+        if (id != null) {
+            // filter by id : select * from category where id = ?id
+            spec = spec.and((root, query, cb) ->
+                    cb.equal(root.get("id"),id)
+                    );
+        }
+        if (name != null && !name.isEmpty()) {
+            spec = spec.and((root, query, cb) ->
+                        cb.like(cb.lower(root.get("name")),"%"+name.toLowerCase()+"%")
+                    );
+        }
+        if (code != null && !code.isEmpty()) {
+            spec = spec.and((root, query, cb) ->
+                        cb.like(cb.lower(root.get("code")),"%"+code.toLowerCase()+"%")
+                    );
+        }
+        if (startDate != null && endDate != null) {
+            spec = spec.and((root, query, cb) ->
+                    cb.between(root.get("createAt"),startDate,endDate)
+                    );
+        }
+
+        // sort
+        Sort sort = Sort.by(Sort.Order.desc("id")); // default sort
+        if (sortBy !=null && sortAs !=null) {
+            sort = sortAs.equalsIgnoreCase("desc") ?
+                    Sort.by(Sort.Order.desc(sortBy)) : Sort.by(Sort.Order.asc(sortBy));
+        }
+        return categoryRepository.findAll(spec,sort);
     }
 
     public CategoryResponse create(CategoryRequest categoryRequest) {
