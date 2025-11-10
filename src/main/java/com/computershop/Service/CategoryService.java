@@ -3,20 +3,21 @@ package com.computershop.Service;
 import com.computershop.DTO.Category.CategoryEditRequest;
 import com.computershop.DTO.Category.CategoryRequest;
 import com.computershop.DTO.Category.CategoryResponse;
+import com.computershop.DTO.Pagination.PageResponse;
 import com.computershop.Exception.NotFoundException;
 import com.computershop.Mapper.CategoryMapper;
 import com.computershop.Model.Entity.Category;
 import com.computershop.Repository.CategoryRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -37,38 +38,35 @@ public class CategoryService {
         return categoryMapper.toResponse(category);
     }
 
-    public List<Category> filter(Long id, String name, String code, LocalDateTime startDate, LocalDateTime endDate, String sortBy, String sortAs) {
+    public PageResponse<CategoryResponse> filter(Long id, String name, String code, LocalDateTime startDate, LocalDateTime endDate, String sortBy, String sortAs, Integer page, Integer size) {
         //  filter or search
         Specification<Category> spec = Specification.unrestricted();
         if (id != null) {
             // filter by id : select * from category where id = ?id
-            spec = spec.and((root, query, cb) ->
-                    cb.equal(root.get("id"),id)
-                    );
+            spec = spec.and((root, query, cb) -> cb.equal(root.get("id"),id));
         }
         if (name != null && !name.isEmpty()) {
-            spec = spec.and((root, query, cb) ->
-                        cb.like(cb.lower(root.get("name")),"%"+name.toLowerCase()+"%")
-                    );
+            spec = spec.and((root, query, cb) -> cb.like(cb.lower(root.get("name")),"%"+name.toLowerCase()+"%"));
         }
         if (code != null && !code.isEmpty()) {
-            spec = spec.and((root, query, cb) ->
-                        cb.like(cb.lower(root.get("code")),"%"+code.toLowerCase()+"%")
-                    );
+            spec = spec.and((root, query, cb) -> cb.like(cb.lower(root.get("code")),"%"+code.toLowerCase()+"%"));
         }
         if (startDate != null && endDate != null) {
-            spec = spec.and((root, query, cb) ->
-                    cb.between(root.get("createAt"),startDate,endDate)
-                    );
+            spec = spec.and((root, query, cb) -> cb.between(root.get("createAt"),startDate,endDate));
         }
 
         // sort
+        List<String> allowSort = List.of("id", "name", "code", "createAt");
         Sort sort = Sort.by(Sort.Order.desc("id")); // default sort
-        if (sortBy !=null && sortAs !=null) {
+        if (sortBy !=null && sortAs !=null && allowSort.contains(sortBy)) {
             sort = sortAs.equalsIgnoreCase("desc") ?
                     Sort.by(Sort.Order.desc(sortBy)) : Sort.by(Sort.Order.asc(sortBy));
         }
-        return categoryRepository.findAll(spec,sort);
+
+        Pageable pageable = PageRequest.of(page - 1, size, sort);
+        Page<Category> categoryPage = categoryRepository.findAll(spec, pageable);
+        return PageResponse.from(categoryPage,categoryMapper::toResponse);
+
     }
 
     public CategoryResponse create(CategoryRequest categoryRequest) {

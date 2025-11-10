@@ -9,27 +9,30 @@ import lombok.NoArgsConstructor;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "categories")
+@Table(name = "products")
 @Data
+@Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@Builder
-public class Category {
+public class Product {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false, unique = true)
-    private String code;
-
-    @Column(nullable = false, unique = false)
+    @Column(nullable = false)
     private String name;
 
     private String description;
 
     @Column(nullable = false)
-    private Boolean status;
+    private Integer quantity = 0;
+
+    @Column(nullable = false)
+    private Double price = 0.0;
+
+    @Column(nullable = false)
+    private Boolean status = true;
 
     @Column(nullable = false)
     private LocalDateTime createAt;
@@ -39,6 +42,16 @@ public class Category {
 
     private LocalDateTime updateAt;
     private String updateBy;
+
+    // relationship
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "categoryId")
+    private Category category;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "brandId")
+    private Brand brand;
 
     @PrePersist
     public void onCreate() {

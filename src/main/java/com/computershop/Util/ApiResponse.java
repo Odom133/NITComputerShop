@@ -6,7 +6,7 @@ import org.springframework.http.HttpStatus;
 import java.time.LocalDateTime;
 
 @Data
-public class ApiResponse<T> {
+public class                    ApiResponse<T> {
     private Boolean success;
     private Integer code;
     private String message;

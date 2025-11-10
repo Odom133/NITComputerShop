@@ -37,9 +37,9 @@ public class CategoryMapper {
                 .name(entity.getName())
                 .description(entity.getDescription())
                 .status(entity.getStatus())
-                .createAt(entity.getCreateAt())
+//                .createAt(entity.getCreateAt())
                 .createBy(entity.getCreateBy())
-                .updateAt(entity.getUpdateAt())
+//                .updateAt(entity.getUpdateAt())
                 .updateBy(entity.getUpdateBy())
                 .build();
     }
