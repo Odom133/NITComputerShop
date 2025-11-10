@@ -3,11 +3,13 @@ package com.computershop.Controller;
 import com.computershop.DTO.Category.CategoryEditRequest;
 import com.computershop.DTO.Category.CategoryRequest;
 import com.computershop.DTO.Category.CategoryResponse;
+import com.computershop.DTO.Pagination.PageResponse;
 import com.computershop.Model.Entity.Category;
 import com.computershop.Service.CategoryService;
 import com.computershop.Util.ApiResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -60,9 +62,11 @@ public class CategoryController {
             @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime startDate, // 2025-10-18T00:00:00
             @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime endDate, // 2025-10-18T23:59:59
             @RequestParam(required = false) String sortBy,
-            @RequestParam(required = false) String sortAs
+            @RequestParam(required = false) String sortAs,
+            @RequestParam(required = false, defaultValue = "1") Integer page,
+            @RequestParam(required = false, defaultValue = "5") Integer size
             ) {
-        List<Category> categories = categoryService.filter(id,name,code,startDate,endDate,sortBy,sortAs);
+        PageResponse<CategoryResponse> categories = categoryService.filter(id,name,code,startDate,endDate,sortBy,sortAs,page,size);
         return ApiResponse.ok(categories);
     }
 
