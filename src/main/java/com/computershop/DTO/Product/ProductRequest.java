@@ -34,4 +34,7 @@ public class ProductRequest {
 
     @NotNull
     private Long categoryId;
+
+    private String createBy;
+    private String updateBy;
 }

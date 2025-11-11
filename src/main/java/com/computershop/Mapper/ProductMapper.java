@@ -5,7 +5,9 @@ import com.computershop.DTO.Product.ProductResponse;
 import com.computershop.Model.Entity.Brand;
 import com.computershop.Model.Entity.Category;
 import com.computershop.Model.Entity.Product;
+import org.springframework.stereotype.Component;
 
+@Component
 public class ProductMapper {
 
     public Product toEntity(ProductRequest dto, Category category, Brand brand) {
@@ -19,6 +21,8 @@ public class ProductMapper {
                 .status(dto.getStatus())
                 .category(category)
                 .brand(brand)
+                .createBy(dto.getCreateBy())
+                .updateBy(dto.getUpdateBy())
                 .build();
     }
 
