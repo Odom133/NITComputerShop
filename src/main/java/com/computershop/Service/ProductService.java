@@ -11,6 +11,9 @@ import com.computershop.Repository.BrandRepository;
 import com.computershop.Repository.CategoryRepository;
 import com.computershop.Repository.ProductRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -52,6 +55,35 @@ public class ProductService {
 
     public List<ProductResponse> list() {
         return productRepository.findAll().stream().map(productMapper::toResponse).toList();
+    }
+
+    public List<ProductResponse> filter(Long id, String name, Boolean status, Long categoryId, Long brandId) {
+        Specification<Product> spec = Specification.unrestricted();
+
+        if (id != null) {
+            spec = spec.and((root, query, cb)
+                    -> cb.equal(root.get("id"),id));
+        }
+        if (name != null) {
+            spec = spec.and((root, query, cb)
+                    -> cb.like(cb.lower(root.get("name")), "%"+(name).toLowerCase()+"%" ));
+        }
+        if (status != null) {
+            spec = spec.and((root, query, cb)
+                    -> cb.equal(root.get("status"),status));
+        }
+        if (brandId != null) {
+            spec = spec.and((root, query, criteriaBuilder) ->
+                    criteriaBuilder.equal(root.get("brand").get("id"), brandId));
+        }
+        if (categoryId != null) {
+            spec = spec.and((root, query, criteriaBuilder) ->
+                    criteriaBuilder.equal(root.get("category").get("id"),categoryId));
+        }
+
+        Sort sort = Sort.by(Sort.Order.desc("id"));
+
+        return productRepository.findAll(spec,sort).stream().map(productMapper::toResponse).toList();
     }
 
     public ProductResponse getById(Long id) {

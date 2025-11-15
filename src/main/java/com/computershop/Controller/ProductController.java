@@ -36,6 +36,18 @@ public class ProductController {
     public ApiResponse<List<ProductResponse>> list() {
         return ApiResponse.ok(productService.list());
     }
+    @GetMapping("/filter")
+    @ResponseStatus(HttpStatus.OK)
+    public ApiResponse<List<ProductResponse>> filter(
+            @RequestParam(required = false) Long id,
+            @RequestParam(required = false) String name,
+            @RequestParam(required = false) Boolean status,
+            @RequestParam(required = false) Long brand,
+            @RequestParam(required = false) Long category
+    ) {
+
+        return ApiResponse.ok(productService.filter(id, name, status, brand, category));
+    }
 
     @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
