@@ -42,11 +42,11 @@ public class ProductController {
             @RequestParam(required = false) Long id,
             @RequestParam(required = false) String name,
             @RequestParam(required = false) Boolean status,
-            @RequestParam(required = false) Long brand,
-            @RequestParam(required = false) Long category
+            @RequestParam(required = false) Long brandId,
+            @RequestParam(required = false) Long categoryId
     ) {
 
-        return ApiResponse.ok(productService.filter(id, name, status, brand, category));
+        return ApiResponse.ok(productService.filter(id, name, status, brandId, categoryId));
     }
 
     @GetMapping("/{id}")
